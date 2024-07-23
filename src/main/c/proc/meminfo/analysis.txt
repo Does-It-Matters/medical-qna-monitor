@@ -1,1 +1,28 @@
 /proc/meminfo 파일 분석
+
+1. 구성
+항목: 숫자 단위(단위: kB)
+
+2. 주요 항목
+- MemTotal: 전체 물리적 메모리 양
+- MemFree: 남아있는 메모리의 양
+- MemAvailable: 실제 이용 가능한 메모리의 양
+
+- Cached: 파일 시스템 캐시로 사용되는 메모리의 양
+- Buffers: 디스크 I/O 버퍼로 사용되는 메모리의 양
+
+- SwapTotal: 스왑 공간으로 쓸 수 있는 메모리의 양
+- SwapFree: 스왑 공간으로 남아있는 메모리의 양
+
+- Active: 현재 사용되는 페이지의 양
+- Inactive: 최근에 사용되지 않는 페이지의 양
+
+- Slab: 커널 데이터 구조로 사용되는 메모리의 양
+- SReclaimable: Slab 캐시 중 다시 사용할 수 있는 메모리의 양
+- KernelStack: 커널 스택으로 사용되는 메모리의 양
+
+- PageTables: 페이지 테이블로 사용되는 메모리의 양
+
+* MemFree vs MemAvailable
+MemFree: 시스템에서 전혀 안 쓰는 메모리
+MemAvailable: 차지하고 있는 공간 중 이용할 수 있는 공간으로 일부 공간을 마련할 수 있음

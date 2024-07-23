@@ -1,1 +1,10 @@
 /proc/partitions 파일 분석
+
+1. 구성
+major minor #blocks name
+
+/proc/diskstats의 여러 필드 중 3개 필드와 #blocks로 구성
+/proc/diskstats의 1번째 필드 -> major
+/proc/diskstats의 2번째 필드 -> minor
+/proc/diskstats의 4번째 필드 -> name
+디스크가 가지고 있는 블록의 수 -> #blocks
