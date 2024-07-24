@@ -1,4 +1,4 @@
-package com.example.monitoring.cpu;
+package com.example.monitoring.webflux.exercise.monitor.cpu;
 
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

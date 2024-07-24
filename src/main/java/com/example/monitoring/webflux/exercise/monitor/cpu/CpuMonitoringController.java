@@ -1,4 +1,4 @@
-package com.example.monitoring.cpu;
+package com.example.monitoring.webflux.exercise.monitor.cpu;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
