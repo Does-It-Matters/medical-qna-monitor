@@ -6,11 +6,14 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 import java.time.Duration;
 
 @Controller
 public class RSocketController {
+
+    private final Sinks.Many<String> alertSink = Sinks.many().multicast().onBackpressureBuffer();
 
     @MessageExceptionHandler
     public Mono<String> handleException(Exception e) {
@@ -18,11 +21,61 @@ public class RSocketController {
         return Mono.just("Exception: " + e.getMessage());
     }
 
+    // 주기적으로 시스템 리소스를 전송하는 엔드포인트
+    @MessageMapping("system-resources")
+    public Flux<String> streamSystemResources() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(index -> "System resource usage at interval " + index + ": CPU: 50%, Memory: 70%");
+    }
+
+    // 비동기 로그 스트림을 전송하는 엔드포인트
+    @MessageMapping("log-stream")
+    public Flux<String> streamLogs() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(index -> "Log entry " + index);
+    }
+
+    // 서버가 클라이언트에게 알림을 보내는 엔드포인트
+    @MessageMapping("alert-stream")
+    public Flux<String> alertStream() {
+        return alertSink.asFlux();
+    }
+
+    // 특정 상황에서 클라이언트에게 알림을 보내는 메서드
+    public void triggerAlert(String alertMessage) {
+        alertSink.tryEmitNext(alertMessage);
+    }
+
+    // == 기초 예제 ==
+    // request-response 예제
     @MessageMapping("request-response")
     public Mono<String> requestResponse(String message) {
         return Mono.just("Response to: " + message);
     }
-//
+
+    // fire-and-forget 예제
+    @MessageMapping("fire-and-forget")
+    public Mono<Void> fireAndForget(String message) {
+        System.out.println("Received: " + message);
+        return Mono.empty();
+    }
+
+    // stream 예제
+    @MessageMapping("stream")
+    public Flux<String> stream(String message) {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(index -> "Stream response " + index + " to " + message)
+                .take(10);
+    }
+
+    // channel 예제
+    @MessageMapping("channel")
+    public Flux<String> channel(Flux<String> messages) {
+        return messages.map(message -> "Response to: " + message);
+    }
+
+// == 심화 예제 ==
+// request-response 예제
 //    @MessageMapping("request-response-with-metadata")
 //    public Mono<String> requestResponseWithMetadata(String message, @Header("custom-header") String header) {
 //        return Mono.just("Response to: " + message + " with header: " + header);
@@ -34,12 +87,8 @@ public class RSocketController {
 //                .then(Mono.just("Delayed response to: " + message));
 //    }
 //
-    @MessageMapping("fire-and-forget")
-    public Mono<Void> fireAndForget(String message) {
-        System.out.println("Received: " + message);
-        return Mono.empty();
-    }
-//
+
+// fire-and-forget 예제
 //    @MessageMapping("fire-and-forget-with-metadata")
 //    public Mono<Void> fireAndForgetWithMetadata(String message, @Header("custom-header") String header) {
 //        System.out.println("Received: " + message + " with header: " + header);
@@ -52,13 +101,8 @@ public class RSocketController {
 //                .then(Mono.fromRunnable(() -> System.out.println("Received after delay: " + message)));
 //    }
 //
-    @MessageMapping("stream")
-    public Flux<String> stream(String message) {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(index -> "Stream response " + index + " to " + message)
-                .take(10);
-    }
-//
+
+// stream 예제
 //    @MessageMapping("stream-with-filter")
 //    public Flux<String> streamWithFilter(String message) {
 //        return Flux.interval(Duration.ofSeconds(1))
@@ -82,11 +126,8 @@ public class RSocketController {
 //        return Flux.merge(stream1, stream2);
 //    }
 //
-    @MessageMapping("channel")
-    public Flux<String> channel(Flux<String> messages) {
-        return messages.map(message -> "Response to: " + message);
-    }
-//
+
+// channel 예제
 //    @MessageMapping("channel-with-filter")
 //    public Flux<String> channelWithFilter(Flux<String> messages) {
 //        return messages
