@@ -8,5 +8,5 @@
 
 ### 사용하는 기술
 1. RSocket
-2. Spring Webflux
-3. RabbitMQ
+2. 
+3. 
