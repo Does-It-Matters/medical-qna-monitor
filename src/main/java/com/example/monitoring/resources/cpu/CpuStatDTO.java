@@ -1,4 +1,4 @@
-package com.example.monitoring.rsocket.cpu;
+package com.example.monitoring.resources.cpu;
 
 import java.util.HashMap;
 import java.util.List;

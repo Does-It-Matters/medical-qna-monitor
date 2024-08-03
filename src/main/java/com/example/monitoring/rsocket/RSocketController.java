@@ -21,31 +21,6 @@ public class RSocketController {
         return Mono.just("Exception: " + e.getMessage());
     }
 
-    // 주기적으로 시스템 리소스를 전송하는 엔드포인트
-    @MessageMapping("system-resources")
-    public Flux<String> streamSystemResources() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(index -> "System resource usage at interval " + index + ": CPU: 50%, Memory: 70%");
-    }
-
-    // 비동기 로그 스트림을 전송하는 엔드포인트
-    @MessageMapping("log-stream")
-    public Flux<String> streamLogs() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(index -> "Log entry " + index);
-    }
-
-    // 서버가 클라이언트에게 알림을 보내는 엔드포인트
-    @MessageMapping("alert-stream")
-    public Flux<String> alertStream() {
-        return alertSink.asFlux();
-    }
-
-    // 특정 상황에서 클라이언트에게 알림을 보내는 메서드
-    public void triggerAlert(String alertMessage) {
-        alertSink.tryEmitNext(alertMessage);
-    }
-
     // == 기초 예제 ==
     // request-response 예제
     @MessageMapping("request-response")

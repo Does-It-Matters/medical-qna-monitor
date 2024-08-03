@@ -1,4 +1,4 @@
-package com.example.monitoring.rsocket.cpu;
+package com.example.monitoring.resources.cpu;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;

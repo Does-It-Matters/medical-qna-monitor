@@ -1,4 +1,4 @@
-package com.example.monitoring.rsocket;
+package com.example.monitoring;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

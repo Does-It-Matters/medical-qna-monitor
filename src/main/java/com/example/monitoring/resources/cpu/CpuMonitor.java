@@ -1,4 +1,4 @@
-package com.example.monitoring.rsocket.cpu;
+package com.example.monitoring.resources.cpu;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
