@@ -22,6 +22,7 @@ public class CpuMonitor {
                 String[] tokens = line.split("\\s+"); // 학습 내용: \\s: 모든 공백 문자(스페이스, 탭, 줄바꿈), +: 하나 이상
                 String name = tokens[0];
                 dto.putSingleCoreStat(name, getStatsOfSingleCore(tokens));
+                System.out.println(name); // 임시 로그 
             }
         }
 
