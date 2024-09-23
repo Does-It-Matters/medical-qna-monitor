@@ -14,13 +14,13 @@ public class CpuStatsController {
     private static final String REAL_PROC_STAT = "/proc/stat";
     private static final String PROC_STAT = TEST_PROC_STAT;
 
-    private final CpuMonitor CPU_MONITOR = new CpuMonitor();
+    private final CpuMonitor cpuMonitor = new CpuMonitor();
 
     // CPU 통계를 전송하는 엔드포인트
     @MessageMapping("cpu-stats")
     public Mono<CpuStatDTO> getCpuStats() {
         try {
-            CpuStatDTO cpuStatDTO = CPU_MONITOR.getCpuStat(PROC_STAT);
+            CpuStatDTO cpuStatDTO = cpuMonitor.getCpuStat(PROC_STAT);
             return Mono.just(cpuStatDTO);
         } catch (IOException e) {
             return Mono.error(e);
@@ -33,7 +33,7 @@ public class CpuStatsController {
         return Flux.interval(Duration.ofMillis(200))
                 .flatMap(tick -> {
                     try {
-                        CpuStatDTO cpuStatDTO = CPU_MONITOR.getCpuStat(PROC_STAT);
+                        CpuStatDTO cpuStatDTO = cpuMonitor.getCpuStat(PROC_STAT);
                         return Mono.just(cpuStatDTO);
                     } catch (IOException e) {
                         return Mono.error(e);
